@@ -6,6 +6,8 @@ import { useMediaQuery } from '@chakra-ui/react'
 //import Image from 'next/image';
 import { Image } from '@chakra-ui/react';
 
+import dummyImage from '../../images/estate-icon.png';
+
 
 const PropertyImages = ({propertyDtls, onImageClick, gridCWidth}) => {
     const [disablePrevBtn, setDisablePrevBtn] = useState(true);
@@ -76,7 +78,7 @@ const PropertyImages = ({propertyDtls, onImageClick, gridCWidth}) => {
                 height={{base: gridCWidth, md: 'auto', lg: 'auto'}} key={'p'+i} 
                 style={{position: 'relative'}} onClick={()=> onImageClick(i)}>
                 <Image src={photo ? photo : defaultImage} boxSize={{base: gridCWidth, md: 'auto', lg: 'auto'}} 
-                objectFit='cover' alt="Property Pics" />
+                objectFit='cover' alt="Property Pics" fallbackSrc={dummyImage.src}/>
                 </Box>
                 )): null}
             </SimpleGrid>

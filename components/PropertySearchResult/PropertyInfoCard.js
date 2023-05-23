@@ -7,15 +7,19 @@ import Image from 'next/image';
 
 const PropertyInfoCard = ({propertyDtls , onPropertyClick}) => {
     //const defaultImage = "https://ap.rdcpix.com/9e6c24a10028e42651d866306062a3e8l-m3734405187x.jpg";
-    const { property_id, coverPhoto, price, prop_type, beds, baths, sqft, address } = {... propertyDtls};
-
+    const { property_id, coverPhoto, coverPhotoLowRes, price, prop_type, beds, baths, sqft, address } = {... propertyDtls};
+    //console.log(propertyDtls);
     return (
         <Flex flexWrap='wrap' w='350px'  paddingTop='0px' justifyContent='flex-start' 
         cursor='pointer' border='1px' rounded='lg' borderColor='gray.200' m={[0,3,3]}
         boxShadow='base' onClick={() => onPropertyClick(property_id)} >
             <Box overflow='hidden' width={350} height={200} borderTopRadius='lg'>
             <Image src={coverPhoto ? coverPhoto : DefaultImage} width={350} height={200}  
-            alt="Property Pics" />
+            alt="Property Pics" loading='lazy'
+            placeholder='blur' 
+            
+            blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8/h8AArMB2L6P/lIAAAAASUVORK5CYII='
+            />
             </Box>
             <Box w='full' p={4}>
                 {price ?

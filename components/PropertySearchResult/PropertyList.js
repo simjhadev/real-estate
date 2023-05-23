@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropertyInfoCard from './PropertyInfoCard';
+import PlaceholderCardList from '../Placeholder/PlaceholderCardList';
 import { SimpleGrid, Flex, Spacer, Center } from '@chakra-ui/react';
 import {
     Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure
@@ -8,6 +9,7 @@ import PropertyDetails from '../PropertyDetails/PropertyDetails';
 import { fetchApi, fetchCurrentLocation } from '../../utils/fetchApi';
 
 import { IoChevronBackCircleSharp, IoChevronForwardCircleSharp } from 'react-icons/io5';
+
 
 const PropertyList = (props) => {
     
@@ -97,6 +99,7 @@ const PropertyList = (props) => {
           const prDtls = data.data.home_search?.results?.map((result)=>({
             property_id : result?.property_id,
             coverPhoto: result?.primary_photo?.href ? (result?.primary_photo?.href).slice(0,-5)+"od-w1024_h768_x2.webp" : null,
+            coverPhotoLowRes: result?.primary_photo?.href ? result.primary_photo.href : null,
             prop_type: ((result?.description?.type).replace("_"," ")).replace(/(\w)(\w*)/g,function(g0,g1,g2){return g1.toUpperCase() + g2.toLowerCase();}),
             price: result?.list_price ? ("$" + new Intl.NumberFormat().format(result?.list_price)) : null,
             beds: result?.description?.beds,
@@ -168,13 +171,17 @@ const PropertyList = (props) => {
     
     return(
         <>
-          {pDtls? <Center w='100%'><SimpleGrid columns={{base: 1, md: 2, lg: 2, xl: 3}} spacing={1}>
+        <Center w='100%'>
+          <SimpleGrid columns={{base: 1, md: 2, lg: 2, xl: 3}} spacing={1}>
+            {pDtls ? 
+            <>
             {pDtls.map((pDtl)=>(
-            <PropertyInfoCard propertyDtls ={pDtl} key={pDtl.property_id} onPropertyClick={openModalhandler} />))}
-            </SimpleGrid></Center> :
-            <Center w='100%'>{propertyFetchError? propertyFetchError: "No Results found"}</Center>
-            }
-
+            <PropertyInfoCard propertyDtls ={pDtl} key={pDtl.property_id} onPropertyClick={openModalhandler} />))} 
+            </>
+            :<PlaceholderCardList count={6}/>}
+          </SimpleGrid>
+        </Center>
+          
           {/*total : {resultTotal}
           offset : {offset}
           PageNo : {pageNo}
