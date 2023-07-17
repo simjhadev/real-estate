@@ -28,24 +28,34 @@ const PropertySearch = (props) => {
     useEffect(()=>{
         const delayDebounceFn = setTimeout(() => {
             if(props.value.length > 3){
-                console.log("Api call");
+                //console.log("Api call");
                 const wordCount = props.value?.trim().split(/[,\s]/).length;
                 if(wordCount == 1){
                     if(!isNaN(props.value.trim())){
                         fetchAutocompleteZipcode(props.value?.trim()).then((data)=>{
-                        setAddresses(data.Result);
+                            setAddresses(data.results?.map((result)=>result.postcode));
+                        })
+                        .catch((error) => {
+                            setAddresses([]);
                         }); 
                     }
                     else{
-                        fetchAutocompleteCity(props.value?.trim()).then((data)=>{                        
-                        setAddresses(data.Result);
+                        fetchAutocompleteCity(props.value?.trim()).then((data)=>{
+                            //console.log(data);                        
+                            setAddresses(data.results?.map((result) => result.address_line1));
+                        })
+                        .catch((error) => {
+                            setAddresses([]);
                         }); 
                     }
                 }
                 else{
                     fetchAutocompleteAddress(props.value?.trim()).then((data)=>{
-                    console.log(data);
-                    setAddresses(data.Result);
+                    //console.log(data);
+                        setAddresses(data.results?.map((result)=>(result.address_line1+" "+ result.address_line2)));
+                    })
+                    .catch((error) => {
+                        setAddresses([]);
                     });  
                 }
             }
